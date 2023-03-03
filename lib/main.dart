@@ -11,12 +11,16 @@ late Size mq;
 void main() {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   WidgetsFlutterBinding.ensureInitialized();
-  _initializeFirebase();
-  runApp(const MyApp());
+
+// for setting the orientation of the app to portrait only
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((value) => {
+        _initializeFirebase(),
+        runApp(const MyApp()),
+      });
 }
-
-
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

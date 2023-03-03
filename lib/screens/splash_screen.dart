@@ -1,5 +1,10 @@
+import 'dart:developer';
+
+import 'package:chatapp/api/apis.dart';
 import 'package:chatapp/main.dart';
+import 'package:chatapp/screens/auth/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'home_sreen.dart';
 
@@ -10,20 +15,27 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-
-
-
-
-
 class _SplashScreenState extends State<SplashScreen> {
   bool _isAnimated = false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(milliseconds: 1500), () {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+    Future.delayed(Duration(seconds: 2), () {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark));
+
+      // Check if user is logged in or not and navigate accordingly
+      if (APIs.auth.currentUser != null) {
+        log('User: ${APIs.auth.currentUser}');
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()));
+      } else {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()));
+      }
     });
   }
 

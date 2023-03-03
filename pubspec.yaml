@@ -38,6 +38,9 @@ dependencies:
 
   # for firebase hueheuheeuehueheue
   firebase_core: ^2.7.0
+  firebase_auth: ^4.2.9
+  #for google sign in huhuehue
+  google_sign_in: ^6.0.2
   # flutter_launcher_icons: ^0.12.0
 
 dev_dependencies:
