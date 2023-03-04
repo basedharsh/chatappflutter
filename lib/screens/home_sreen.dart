@@ -1,8 +1,16 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:chatapp/api/apis.dart';
+import 'package:chatapp/models/chat_user.dart';
+import 'package:chatapp/screens/profile_screen.dart';
+import 'package:chatapp/widgets/chat_user_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../main.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<ChatUser> list = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,9 +41,18 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {},
             icon: Icon(Icons.search), //Search icon
           ),
+
+          //More icon
           IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.more_vert), //More icon
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProfileScreen(
+                            user: list[0],
+                          )));
+            },
+            icon: Icon(Icons.more_vert),
           ),
         ],
         backgroundColor: Colors.white,
@@ -51,6 +69,43 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Icon(Icons.message), //Message icon (chat bubble)
         ),
       ),
+
+      body: StreamBuilder(
+          stream: APIs.firestore
+              .collection('users')
+              .snapshots(), //users collection from firestore database in firebase
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              //if data is not loaded yet then waiting or none
+              case ConnectionState.waiting:
+              case ConnectionState.none:
+                return const Center(child: CircularProgressIndicator());
+
+              //if data is loaded then active or done then show data
+              case ConnectionState.active:
+              case ConnectionState.done:
+                final data = snapshot.data?.docs;
+                // error in docs due to null safety in flutter to solve this error we have to add ? after docs
+                list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
+                    [];
+                if (list.isNotEmpty) {
+                  return ListView.builder(
+                      itemCount: list.length,
+                      padding: EdgeInsets.only(top: mq.height * .01),
+                      physics: BouncingScrollPhysics(),
+                      itemBuilder: ((context, index) {
+                        return ChatUserCard(
+                          user: list[index],
+                        );
+                        // return Text('Name: ${list[index]}');
+                      }));
+                } else {
+                  return const Center(
+                      child: Text('No user found',
+                          style: TextStyle(fontSize: 20)));
+                }
+            }
+          }),
     );
   }
 }
