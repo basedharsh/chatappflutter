@@ -41,6 +41,11 @@ dependencies:
   firebase_auth: ^4.2.9
   #for google sign in huhuehue
   google_sign_in: ^6.0.2
+
+  # To access cloud firestore database
+  cloud_firestore: ^4.4.3
+  # for showing network images
+  cached_network_image: ^3.2.3
   # flutter_launcher_icons: ^0.12.0
 
 dev_dependencies:
