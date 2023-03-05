@@ -46,6 +46,10 @@ dependencies:
   cloud_firestore: ^4.4.3
   # for showing network images
   cached_network_image: ^3.2.3
+  # for picking Images
+  image_picker: ^0.8.6+4
+  # for accesing firebase image storage
+  firebase_storage: ^11.0.14
   # flutter_launcher_icons: ^0.12.0
 
 dev_dependencies:

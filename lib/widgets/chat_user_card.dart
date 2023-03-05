@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import '../models/chat_user.dart';
+import '../screens/chat_screen.dart';
 
 class ChatUserCard extends StatefulWidget {
   final ChatUser user;
@@ -26,7 +27,15 @@ class _ChatUserCardState extends State<ChatUserCard> {
         borderRadius: BorderRadius.circular(15),
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          // Navigate to chat screen
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => ChatScreen(
+                        user: widget.user,
+                      )));
+        },
         child: ListTile(
           // User image
           // leading: const CircleAvatar(
