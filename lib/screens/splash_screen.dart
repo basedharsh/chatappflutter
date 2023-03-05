@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(Duration(seconds: 2), () {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Colors.white,
           statusBarIconBrightness: Brightness.dark));
 
       // Check if user is logged in or not and navigate accordingly
