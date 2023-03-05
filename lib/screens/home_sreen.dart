@@ -71,7 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       _searchlist.clear();
                       for (var i in _list) {
                         if (i.name.toLowerCase().contains(val.toLowerCase()) ||
-                            i.email.toLowerCase().contains(val.toLowerCase())) {
+                            i.email.toLowerCase().contains(val.toLowerCase()) ||
+                            i.about.toLowerCase().contains(val.toLowerCase())) {
                           _searchlist.add(i);
                         }
                         setState(() {

@@ -25,6 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
           systemNavigationBarColor: Colors.white,
+          statusBarColor: Colors.white,
           statusBarIconBrightness: Brightness.dark));
 
       // Check if user is logged in or not and navigate accordingly
@@ -67,7 +68,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Positioned(
             bottom: mq.height * .15,
             width: mq.width,
-            child: const Text('Manan ki mommy😊👌',
+            child: const Text('hsrah_😊👌',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.black87,
