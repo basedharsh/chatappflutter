@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'dart:ffi';
 
 import 'package:chatapp/api/apis.dart';
+import 'package:chatapp/helper/my_date.dart';
 import 'package:chatapp/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,8 +28,12 @@ class _MessageCardState extends State<MessageCard> {
         : _blueMessage();
   }
 
-// Sender message
+// Sender message samne wale ka message hai
   Widget _blueMessage() {
+    // Update last read message
+    if (widget.message.read.isEmpty) {
+      APIs.updateMessageTick(widget.message);
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -50,7 +56,9 @@ class _MessageCardState extends State<MessageCard> {
         ),
         Padding(
           padding: EdgeInsets.only(right: mq.width * 0.04),
-          child: Text(widget.message.sent,
+          child: Text(
+              MyDateHelper.getFormattedDate(
+                  context: context, time: widget.message.sent),
               style: const TextStyle(
                   fontSize: 12, color: Color.fromARGB(255, 55, 57, 53))),
         ),
@@ -69,13 +77,16 @@ class _MessageCardState extends State<MessageCard> {
           children: [
             SizedBox(width: mq.width * 0.04),
             //Double tick to check message is read or not
-            const Icon(Icons.done_all,
-                size: 20, color: Color.fromARGB(255, 23, 146, 227)),
+            if (widget.message.read.isNotEmpty)
+              const Icon(Icons.done_all,
+                  size: 20, color: Color.fromARGB(255, 23, 146, 227)),
 
             //for some space between double tick and time
             SizedBox(width: mq.width * 0.02),
-            // read time
-            Text('${widget.message.read}12:00 AM',
+            // send time
+            Text(
+                MyDateHelper.getFormattedDate(
+                    context: context, time: widget.message.sent),
                 style: const TextStyle(
                     fontSize: 12, color: Color.fromARGB(255, 55, 57, 53))),
           ],
