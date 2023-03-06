@@ -131,4 +131,22 @@ class APIs {
         .collection('chats/${getConversationId(chatUser.id)}/messages/');
     await ref.doc(time).set(message.toJson());
   }
+
+  // Blue tick means message is read by the receiver
+  static Future<void> updateMessageTick(Message message) async {
+    firestore
+        .collection('chats/${getConversationId(message.fromId)}/messages/')
+        .doc(message.sent)
+        .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
+  }
+
+  // get only last message of a chat on home screen
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getLastmessage(
+      ChatUser user) {
+    return firestore
+        .collection('chats/${getConversationId(user.id)}/messages/')
+        .orderBy('sent', descending: true)
+        .limit(1)
+        .snapshots();
+  }
 }
