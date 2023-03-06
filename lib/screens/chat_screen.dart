@@ -1,11 +1,17 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/models/chat_user.dart';
+import 'package:chatapp/models/message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+import '../api/apis.dart';
 import '../main.dart';
+import '../widgets/message_card.dart';
 
 class ChatScreen extends StatefulWidget {
   final ChatUser user;
@@ -19,6 +25,11 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  // for storing all messages
+  List<Message> _list = [];
+
+// for handling text field messages and sending them
+  final _textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -28,42 +39,47 @@ class _ChatScreenState extends State<ChatScreen> {
           flexibleSpace: _appBar(),
           backgroundColor: Colors.white,
         ),
+        backgroundColor: Color.fromARGB(255, 146, 254, 254),
         body: Column(
           children: [
             Expanded(
               child: StreamBuilder(
-                  // stream: APIs.getAllUsers(), //users collection from firestore database in firebase
+                  stream: APIs.getAllmessages(widget
+                      .user), //users collection from firestore database in firebase
                   builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  //if data is not loaded yet then waiting or none
-                  case ConnectionState.waiting:
-                  case ConnectionState.none:
-                  // return const Center(child: CircularProgressIndicator());
+                    switch (snapshot.connectionState) {
+                      //if data is not loaded yet then waiting or none
+                      case ConnectionState.waiting:
+                      case ConnectionState.none:
+                        return const SizedBox();
 
-                  //if data is loaded then active or done then show data
-                  case ConnectionState.active:
-                  case ConnectionState.done:
-                    // final data = snapshot.data?.docs;
-                    // // error in docs due to null safety in flutter to solve this error we have to add ? after docs
-                    // _list =
-                    //     data?.map((e) => ChatUser.fromJson(e.data())).toList() ??[];
+                      //if data is loaded then active or done then show data
+                      case ConnectionState.active:
+                      case ConnectionState.done:
+                        final data = snapshot.data?.docs;
 
-                    final _list = ['Hii', 'Hello', 'How are you?'];
-                    if (_list.isNotEmpty) {
-                      return ListView.builder(
-                          itemCount: _list.length,
-                          padding: EdgeInsets.only(top: mq.height * .01),
-                          physics: BouncingScrollPhysics(),
-                          itemBuilder: ((context, index) {
-                            return Text('Message: ${_list[index]}');
-                          }));
-                    } else {
-                      return const Center(
-                          child: Text('Say hii😯😯!',
-                              style: TextStyle(fontSize: 20)));
+                        _list = data
+                                ?.map((e) => Message.fromJson(e.data()))
+                                .toList() ??
+                            [];
+
+                        if (_list.isNotEmpty) {
+                          return ListView.builder(
+                              itemCount: _list.length,
+                              padding: EdgeInsets.only(top: mq.height * .01),
+                              physics: BouncingScrollPhysics(),
+                              itemBuilder: ((context, index) {
+                                return MessageCard(
+                                  message: _list[index],
+                                );
+                              }));
+                        } else {
+                          return const Center(
+                              child: Text('Say hii😯😯!',
+                                  style: TextStyle(fontSize: 20)));
+                        }
                     }
-                }
-              }),
+                  }),
             ),
             _chatInput()
           ],
@@ -151,6 +167,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   // text send box
                   Expanded(
                       child: TextField(
+                    controller: _textController,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     decoration: InputDecoration(
@@ -187,7 +204,12 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           // Send message button
           MaterialButton(
-              onPressed: () {},
+              onPressed: () {
+                if (_textController.text.isNotEmpty) {
+                  APIs.sendMessage(widget.user, _textController.text);
+                  _textController.text = '';
+                }
+              },
               minWidth: 0,
               padding:
                   EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
@@ -200,3 +222,4 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
+// // error in docs due to null safety in flutter to solve this error we have to add ? after docs
