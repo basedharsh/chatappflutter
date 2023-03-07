@@ -45,7 +45,9 @@ class _SplashScreenState extends State<SplashScreen> {
     mq = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 230, 249, 255),
       appBar: AppBar(
+        foregroundColor: Color.fromARGB(255, 230, 249, 255),
         //Home icon
         automaticallyImplyLeading: false,
         centerTitle: true,
@@ -68,13 +70,30 @@ class _SplashScreenState extends State<SplashScreen> {
           Positioned(
             bottom: mq.height * .15,
             width: mq.width,
-            child: const Text('hsrah_😊👌',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.black87,
-                    letterSpacing: .9,
-                    fontWeight: FontWeight.normal,
-                    fontSize: 19)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.message_outlined,
+                  color: Colors.black87,
+                  size: 24,
+                ),
+                const Text('Insta: ',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Color.fromRGBO(0, 0, 0, 0.867),
+                        letterSpacing: .9,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 24)),
+                const Text('basedharsh 😊👌',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 251, 172, 172),
+                        letterSpacing: .9,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 24)),
+              ],
+            ),
           ),
         ],
       ),

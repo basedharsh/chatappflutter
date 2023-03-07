@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:ffi';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/api/apis.dart';
 import 'package:chatapp/helper/my_date.dart';
 import 'package:chatapp/main.dart';
@@ -50,8 +51,28 @@ class _MessageCardState extends State<MessageCard> {
                   topRight: Radius.circular(20),
                   bottomLeft: Radius.circular(20),
                 )),
-            child: Text(widget.message.msg,
-                style: const TextStyle(fontSize: 15, color: Colors.black87)),
+            child: widget.message.type == Type.text
+                // show text message if type is text
+                ? Text(
+                    widget.message
+                        .msg, // message content check karna hai ki if image then image else text
+                    style: const TextStyle(fontSize: 15, color: Colors.black87),
+                  )
+                // Else show image if type is image
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(mq.height * .03),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.message.msg,
+                      placeholder: (context, url) => const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator(
+                          color: Colors.green,
+                        ),
+                      ),
+                      errorWidget: (context, url, error) =>
+                          Icon(Icons.image, size: 70),
+                    ),
+                  ),
           ),
         ),
         Padding(
@@ -104,8 +125,28 @@ class _MessageCardState extends State<MessageCard> {
                   topLeft: Radius.circular(20),
                   bottomLeft: Radius.circular(20),
                 )),
-            child: Text(widget.message.msg,
-                style: const TextStyle(fontSize: 15, color: Colors.black87)),
+            child: widget.message.type == Type.text
+                // show text message if type is text
+                ? Text(
+                    widget.message
+                        .msg, // message content check karna hai ki if image then image else text
+                    style: const TextStyle(fontSize: 15, color: Colors.black87),
+                  )
+                // Else show image if type is image
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(mq.height * .03),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.message.msg,
+                      placeholder: (context, url) => const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator(
+                          color: Colors.green,
+                        ),
+                      ),
+                      errorWidget: (context, url, error) =>
+                          Icon(Icons.image, size: 70),
+                    ),
+                  ),
           ),
         ),
       ],
