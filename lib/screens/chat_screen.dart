@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../api/apis.dart';
 import '../main.dart';
@@ -34,7 +35,11 @@ class _ChatScreenState extends State<ChatScreen> {
   final _textController = TextEditingController();
 
 // for storing value of emoji button
-  bool _showEmoji = false;
+  bool _showEmoji = false,
+
+      // _isuploading is for showing progress indicator when image is uploading
+
+      _isUploading = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -85,6 +90,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
                             if (_list.isNotEmpty) {
                               return ListView.builder(
+                                  reverse:
+                                      true, // for showing latest message at bottom of the list view
                                   itemCount: _list.length,
                                   padding:
                                       EdgeInsets.only(top: mq.height * .01),
@@ -102,6 +109,16 @@ class _ChatScreenState extends State<ChatScreen> {
                         }
                       }),
                 ),
+                // for showing progress indicator when image is uploading to firebase storage
+                if (_isUploading)
+                  const Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ))),
                 // for showing the input field and send button
                 _chatInput(),
                 if (_showEmoji)
@@ -230,9 +247,24 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   )),
 
-                  // Pick image from gallery
+                  // Pick image from gallery button
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      final ImagePicker picker = ImagePicker();
+                      // Pick bohot saare images at once
+                      final List<XFile> images =
+                          await picker.pickMultiImage(imageQuality: 50);
+
+                      // upload aur send karna hai images ko one by one
+                      for (var i in images) {
+                        log("Image path: ${i.path} ");
+                        setState(() => _isUploading =
+                            true); // to show progress indicator when image is uploading to firebase storage
+                        await APIs.sendInChatImage(widget.user, File(i.path));
+                        setState(() => _isUploading =
+                            false); // to hide progress indicator when image is uploaded to firebase storage
+                      }
+                    },
                     icon: Icon(
                       Icons.image_sharp,
                       color: Colors.greenAccent.shade700,
@@ -242,7 +274,22 @@ class _ChatScreenState extends State<ChatScreen> {
 
                   // pick image from camera
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      final ImagePicker picker = ImagePicker();
+                      // Pick an image
+                      final XFile? image = await picker.pickImage(
+                          source: ImageSource.camera, imageQuality: 50);
+                      if (image != null) {
+                        log("Image path: ${image.path} ");
+                        setState(() => _isUploading =
+                            true); // to show progress indicator when image is uploading to firebase storage
+
+                        await APIs.sendInChatImage(
+                            widget.user, File(image.path));
+                        setState(() => _isUploading =
+                            false); // to hide progress indicator when image is uploaded to firebase storage
+                      }
+                    },
                     icon: Icon(
                       Icons.camera_alt_rounded,
                       color: Colors.greenAccent.shade700,
@@ -257,7 +304,8 @@ class _ChatScreenState extends State<ChatScreen> {
           MaterialButton(
               onPressed: () {
                 if (_textController.text.isNotEmpty) {
-                  APIs.sendMessage(widget.user, _textController.text);
+                  APIs.sendMessage(
+                      widget.user, _textController.text, Type.text);
                   _textController.text = '';
                 }
               },
