@@ -50,6 +50,9 @@ dependencies:
   image_picker: ^0.8.6+4
   # for accesing firebase image storage
   firebase_storage: ^11.0.14
+
+  # for picking emojis inside chat screen
+  emoji_picker_flutter: ^1.5.2
   # flutter_launcher_icons: ^0.12.0
 
 dev_dependencies:
