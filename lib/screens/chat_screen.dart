@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/models/chat_user.dart';
 import 'package:chatapp/models/message.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -30,59 +32,97 @@ class _ChatScreenState extends State<ChatScreen> {
 
 // for handling text field messages and sending them
   final _textController = TextEditingController();
+
+// for storing value of emoji button
+  bool _showEmoji = false;
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          flexibleSpace: _appBar(),
-          backgroundColor: Colors.white,
-        ),
-        backgroundColor: Color.fromARGB(255, 146, 254, 254),
-        body: Column(
-          children: [
-            Expanded(
-              child: StreamBuilder(
-                  stream: APIs.getAllmessages(widget
-                      .user), //users collection from firestore database in firebase
-                  builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
-                      //if data is not loaded yet then waiting or none
-                      case ConnectionState.waiting:
-                      case ConnectionState.none:
-                        return const SizedBox();
-
-                      //if data is loaded then active or done then show data
-                      case ConnectionState.active:
-                      case ConnectionState.done:
-                        final data = snapshot.data?.docs;
-
-                        _list = data
-                                ?.map((e) => Message.fromJson(e.data()))
-                                .toList() ??
-                            [];
-
-                        if (_list.isNotEmpty) {
-                          return ListView.builder(
-                              itemCount: _list.length,
-                              padding: EdgeInsets.only(top: mq.height * .01),
-                              physics: BouncingScrollPhysics(),
-                              itemBuilder: ((context, index) {
-                                return MessageCard(
-                                  message: _list[index],
-                                );
-                              }));
-                        } else {
-                          return const Center(
-                              child: Text('Say hii😯😯!',
-                                  style: TextStyle(fontSize: 20)));
-                        }
-                    }
-                  }),
+    return GestureDetector(
+      onTap: (() => FocusScope.of(context).unfocus()),
+      child: SafeArea(
+        child: WillPopScope(
+          // if user press back button then hide emoji picker and don't exit app to main screen
+          onWillPop: () {
+            if (_showEmoji) {
+              setState(() {
+                _showEmoji = !_showEmoji;
+              }); // Harsh ne likha hai lavde(only if you read my code text me at (www.instagram.com/basedharsh))
+              return Future.value(
+                  false); // Futuure.value is false then we will not exit the app
+            } else {
+              return Future.value(true); // if true then we will exit the app
+            }
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              flexibleSpace: _appBar(),
+              backgroundColor: Colors.white,
             ),
-            _chatInput()
-          ],
+            backgroundColor: Color.fromARGB(255, 146, 254, 254),
+            body: Column(
+              children: [
+                Expanded(
+                  child: StreamBuilder(
+                      stream: APIs.getAllmessages(widget
+                          .user), //users collection from firestore database in firebase
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          //if data is not loaded yet then waiting or none
+                          case ConnectionState.waiting:
+                          case ConnectionState.none:
+                            return const SizedBox();
+
+                          //if data is loaded then active or done then show data
+                          case ConnectionState.active:
+                          case ConnectionState.done:
+                            final data = snapshot.data?.docs;
+
+                            _list = data
+                                    ?.map((e) => Message.fromJson(e.data()))
+                                    .toList() ??
+                                [];
+
+                            if (_list.isNotEmpty) {
+                              return ListView.builder(
+                                  itemCount: _list.length,
+                                  padding:
+                                      EdgeInsets.only(top: mq.height * .01),
+                                  physics: BouncingScrollPhysics(),
+                                  itemBuilder: ((context, index) {
+                                    return MessageCard(
+                                      message: _list[index],
+                                    );
+                                  }));
+                            } else {
+                              return const Center(
+                                  child: Text('Say hii😯😯!',
+                                      style: TextStyle(fontSize: 20)));
+                            }
+                        }
+                      }),
+                ),
+                // for showing the input field and send button
+                _chatInput(),
+                if (_showEmoji)
+                  SizedBox(
+                    height: mq.height * .35,
+                    child: EmojiPicker(
+                      textEditingController: _textController,
+                      config: Config(
+                        bgColor: const Color.fromARGB(255, 146, 254, 254),
+                        columns: 9,
+                        initCategory: Category.RECENT,
+                        emojiSizeMax: 32 *
+                            (Platform.isIOS
+                                ? 1.30
+                                : 1.0), // Issue: https://github.com/flutter/flutter/issues/28894
+                      ),
+                    ),
+                  )
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -156,7 +196,12 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: [
                   //emoji button
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      FocusScope.of(context)
+                          .unfocus(); // to hide keyboard when emoji button is pressed
+                      setState(() => _showEmoji =
+                          !_showEmoji); // to show emoji picker when emoji button is pressed
+                    },
                     icon: Icon(
                       Icons.emoji_emotions,
                       color: Colors.greenAccent.shade700,
@@ -170,6 +215,12 @@ class _ChatScreenState extends State<ChatScreen> {
                     controller: _textController,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
+                    onTap: () {
+                      // to hide emoji picker when text field is tapped
+                      if (_showEmoji)
+                        setState(() => _showEmoji =
+                            !_showEmoji); // to hide emoji picker when text field is tapped
+                    },
                     decoration: InputDecoration(
                       hintText: "Type a message",
                       hintStyle: TextStyle(
