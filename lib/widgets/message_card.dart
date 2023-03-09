@@ -7,7 +7,6 @@ import 'package:chatapp/helper/my_date.dart';
 import 'package:chatapp/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import '../models/message.dart';
