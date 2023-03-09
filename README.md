@@ -41,7 +41,7 @@ This is just an Basic ChatApp made using Flutter and Firebase.
 ## How to run code on your own device
 **Step 1:**
 
-Go to following Link and follow the instructions to install Flutter and do the Android Studio setup as mentioned
+```Go to following Link and follow the instructions to install Flutter and do the Android Studio setup as mentioned```
 
 
 <a href="https://docs.flutter.dev/get-started/install" target="_blank">Flutter and Android Studio Setup</a>
