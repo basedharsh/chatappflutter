@@ -31,7 +31,7 @@
 
 <p align="center"> 
   Visitor count<br>
-  <img src="https://profile-counter.glitch.me/basedharsh/count.svg" />
+  <img src="https://profile-counter.glitch.me/basedharsh/chatappflutter/count.svg" />
 </p>
 
 <h3 align="center">
