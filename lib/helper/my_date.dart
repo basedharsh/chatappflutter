@@ -23,6 +23,35 @@ class MyDateHelper {
     return '${sent.day} ${_getMonth(sent)}';
   }
 
+// Get formatted last active time of user in chat screen-->
+  static String getLastActiveTime(
+      {required BuildContext context, required String lastActive}) {
+    final int i = int.tryParse(lastActive) ?? -1;
+
+    // if last active time is not available then return NA
+    if (i == -1) return 'last seen NA';
+
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(i);
+    DateTime now = DateTime.now();
+
+    // if last active time is today
+    String formattedTime = TimeOfDay.fromDateTime(time).format(context);
+    if (now.day == time.day &&
+        now.month == time.month &&
+        now.year == time.year) {
+      return 'Last seen today at $formattedTime';
+    }
+
+    // if last active time is yesterday
+    if ((now.difference(time).inHours / 24).round() == 1) {
+      return 'Last seen yesterday at $formattedTime';
+    }
+
+    // if last active time is before yesterday
+    String month = _getMonth(time);
+    return 'Last seen on ${time.day} $month on $formattedTime';
+  }
+
 // get month name from month number or index
   static String _getMonth(DateTime data) {
     switch (data.month) {

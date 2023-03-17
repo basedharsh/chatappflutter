@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chatapp/helper/my_date.dart';
 import 'package:chatapp/models/chat_user.dart';
 import 'package:chatapp/models/message.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
@@ -147,54 +148,70 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _appBar() {
     return InkWell(
-      onTap: () {},
-      child: Row(
-        children: [
-          IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.black87,
-              )),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(mq.height * .03),
-            child: CachedNetworkImage(
-              width: mq.height * .05,
-              height: mq.height * .05,
-              imageUrl: widget.user.image,
-              errorWidget: (context, url, error) => const CircleAvatar(
-                child: Icon(CupertinoIcons.person),
-              ),
-            ),
-          ),
-          SizedBox(width: 10),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // for printing the name of the user
-              Text(
-                widget.user.name,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 2),
-              // for printing the last seen of the user
-              Text(
-                "Yeh raaz bhi uske saath chala gaya",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
+        onTap: () {},
+        child: StreamBuilder(
+            stream: APIs.getUserInfo(widget.user),
+            builder: (context, snapshot) {
+              final data = snapshot.data?.docs;
+              final list =
+                  data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+
+              return Row(
+                children: [
+                  IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.black87,
+                      )),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(mq.height * .03),
+                    child: CachedNetworkImage(
+                      width: mq.height * .05,
+                      height: mq.height * .05,
+                      imageUrl:
+                          list.isNotEmpty ? list[0].image : widget.user.image,
+                      errorWidget: (context, url, error) => const CircleAvatar(
+                        child: Icon(CupertinoIcons.person),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // for printing the name of the user
+                      Text(
+                        list.isNotEmpty ? list[0].name : widget.user.name,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      // for printing the last seen of the user
+                      Text(
+                        list.isNotEmpty
+                            ? list[0].isOnline
+                                ? 'Yeh vyakti online hei'
+                                : MyDateHelper.getLastActiveTime(
+                                    context: context,
+                                    lastActive: list[0].lastActive)
+                            : MyDateHelper.getLastActiveTime(
+                                context: context,
+                                lastActive: widget.user.lastActive),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              );
+            }));
   }
 
   Widget _chatInput() {
