@@ -8,6 +8,7 @@ import 'package:chatapp/widgets/chat_user_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../main.dart';
@@ -30,6 +31,22 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     APIs.getSelfInfo();
+
+    // to update last active status via firebase and system channel
+    // This is to set user status to online when user open app
+    APIs.updateLastActive(true);
+
+    // resume means user open app
+    // paused means user exit app
+    // Here we used system channel to get app state and update last active status like whatsapp and telegram
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      log('message: $message');
+      // here when user exit app then update last active status to false
+      if (message.toString().contains('paused')) APIs.updateLastActive(false);
+      // here when user open app then update last active status to true
+      if (message.toString().contains('resume')) APIs.updateLastActive(true);
+      return Future.value(message);
+    });
   }
 
   Widget build(BuildContext context) {
