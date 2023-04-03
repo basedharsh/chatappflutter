@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:chatapp/api/apis.dart';
 import 'package:chatapp/models/chat_user.dart';
 import 'package:chatapp/screens/profile_screen.dart';
+import 'package:chatapp/screens/trialui.dart';
 import 'package:chatapp/widgets/chat_user_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -149,10 +150,12 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(bottom: 12.0),
             child: FloatingActionButton(
               onPressed: () async {
-                await APIs.auth.signOut();
-                await GoogleSignIn().signOut();
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (context) => trialui()));
               },
-              child: Icon(Icons.message), //Message icon (chat bubble)
+              child: Icon(Icons.message),
+
+              //Message icon (chat bubble)
             ),
           ),
 
