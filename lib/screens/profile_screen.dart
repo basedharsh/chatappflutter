@@ -6,6 +6,7 @@ import 'package:chatapp/api/apis.dart';
 import 'package:chatapp/helper/dialouges.dart';
 import 'package:chatapp/models/chat_user.dart';
 import 'package:chatapp/screens/auth/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -54,6 +55,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onPressed: () async {
               // For showing progress bar
               Dialogs.showProgressBar(context);
+              // For
+              await APIs.updateLastActive(false);
               // For signing out
               await APIs.auth.signOut().then((value) async {
                 await GoogleSignIn().signOut().then((value) {
@@ -61,6 +64,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Navigator.pop(context);
                   // for moving to home screen
                   Navigator.pop(context);
+
+                  APIs.auth = FirebaseAuth.instance;
                   // Basially yeha hum back jaarahe home screen pe fir logout ke liye Navigator pushReplacement use karahe hai
                   // replacing the home screen with login screen
                   Navigator.pushReplacement(context,
