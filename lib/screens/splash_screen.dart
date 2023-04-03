@@ -45,9 +45,9 @@ class _SplashScreenState extends State<SplashScreen> {
     mq = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 230, 249, 255),
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
-        foregroundColor: Color.fromARGB(255, 230, 249, 255),
+        foregroundColor: Color.fromARGB(255, 255, 255, 255),
         //Home icon
         automaticallyImplyLeading: false,
         centerTitle: true,

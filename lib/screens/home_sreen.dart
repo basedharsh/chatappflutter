@@ -33,6 +33,19 @@ class _HomeScreenState extends State<HomeScreen> {
     APIs.getSelfInfo();
 
     // to update last active status via firebase and system channel
+    // system channel is an inbuilt channel in flutter to get app state
+    // Resume means user open app
+    // Paused means user exit app
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      log('message: $message');
+      if (APIs.auth.currentUser != null) {
+        if (message.toString().contains('paused')) APIs.updateLastActive(false);
+        if (message.toString().contains('resume')) APIs.updateLastActive(true);
+      }
+      return Future.value(message);
+    });
+
+    // to update last active status via firebase and system channel
     // This is to set user status to online when user open app
     APIs.updateLastActive(true);
 
