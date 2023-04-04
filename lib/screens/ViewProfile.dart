@@ -143,10 +143,12 @@ class _ViewSenderProfileState extends State<ViewSenderProfile> {
                           fontSize: 16)),
                 ],
               ),
+              
             ]),
           ),
         ),
       ),
     );
   }
+  
 }
