@@ -63,7 +63,7 @@ _initializeFirebase() async {
     print(result);
   }
 }
-
+// trial hahahaha
 
 // This is coded by harsh (my socials -> Instagram: @hsrah_, github: @basedharsh, email: basedharsh@gmail.com)
 
