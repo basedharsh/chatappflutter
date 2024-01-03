@@ -60,17 +60,18 @@ class _MessageCardState extends State<MessageCard> {
                 // Else show image if type is image
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(mq.height * .03),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.message.msg,
-                      placeholder: (context, url) => const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(
-                          color: Colors.green,
-                        ),
-                      ),
-                      errorWidget: (context, url, error) =>
-                          Icon(Icons.image, size: 70),
-                    ),
+                    child: Image.network(widget.message.msg, fit: BoxFit.cover),
+                    // CachedNetworkImage(
+                    //   imageUrl: widget.message.msg,
+                    //   placeholder: (context, url) => const Padding(
+                    //     padding: EdgeInsets.all(8.0),
+                    //     child: CircularProgressIndicator(
+                    //       color: Colors.green,
+                    //     ),
+                    //   ),
+                    //   errorWidget: (context, url, error) =>
+                    //       Icon(Icons.image, size: 70),
+                    // ),
                   ),
           ),
         ),
@@ -134,7 +135,9 @@ class _MessageCardState extends State<MessageCard> {
                 // Else show image if type is image
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(mq.height * .03),
-                    child: CachedNetworkImage(
+                    child:
+                        // Image.network(widget.message.msg, fit: BoxFit.cover),
+                        CachedNetworkImage(
                       imageUrl: widget.message.msg,
                       placeholder: (context, url) => const Padding(
                         padding: EdgeInsets.all(8.0),

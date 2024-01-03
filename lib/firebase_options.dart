@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -49,6 +43,16 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBrRsFCcRDh55reUmjc37pNAWIWpcQcm-0',
+    appId: '1:583224826951:web:d0446c5bf9aaa1fc222562',
+    messagingSenderId: '583224826951',
+    projectId: 'chat-app-f91e7',
+    authDomain: 'chat-app-f91e7.firebaseapp.com',
+    storageBucket: 'chat-app-f91e7.appspot.com',
+    measurementId: 'G-HSTWKS3MLJ',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyATKZUBD3HAb9T1-ow5N8zmoZdPioYZMjg',
     appId: '1:583224826951:android:029937d82562687a222562',
@@ -63,7 +67,18 @@ class DefaultFirebaseOptions {
     messagingSenderId: '583224826951',
     projectId: 'chat-app-f91e7',
     storageBucket: 'chat-app-f91e7.appspot.com',
-    androidClientId: '583224826951-vm0pl75aje570sfl5cs923vcaj94ju4e.apps.googleusercontent.com',
+    androidClientId: '583224826951-rlpjem8h79vdt71t0gidi04thgmo80ge.apps.googleusercontent.com',
+    iosClientId: '583224826951-p3g7q56fm1uthfqiv8ccdg7tsfooogdh.apps.googleusercontent.com',
+    iosBundleId: 'com.example.chatapp',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyDarjoT0LGcMrTP0Id4JfghSrqgiyOB8kk',
+    appId: '1:583224826951:ios:f8c8bb9d2dce1633222562',
+    messagingSenderId: '583224826951',
+    projectId: 'chat-app-f91e7',
+    storageBucket: 'chat-app-f91e7.appspot.com',
+    androidClientId: '583224826951-rlpjem8h79vdt71t0gidi04thgmo80ge.apps.googleusercontent.com',
     iosClientId: '583224826951-p3g7q56fm1uthfqiv8ccdg7tsfooogdh.apps.googleusercontent.com',
     iosBundleId: 'com.example.chatapp',
   );
