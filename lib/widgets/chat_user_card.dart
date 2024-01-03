@@ -52,10 +52,17 @@ class _ChatUserCardState extends State<ChatUserCard> {
               }
               return ListTile(
                 // User image
+                /////////////////////////////////////////////
 
                 leading: ClipRRect(
                   borderRadius: BorderRadius.circular(mq.height * .03),
-                  child: CachedNetworkImage(
+                  child:
+                      // Image.network(
+                      //   widget.user.image,
+                      //   height: 50,
+                      //   width: 50,
+                      // ),
+                      CachedNetworkImage(
                     width: mq.height * .055,
                     height: mq.height * .055,
                     imageUrl: widget.user.image,
