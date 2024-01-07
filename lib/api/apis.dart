@@ -1,10 +1,13 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:chatapp/models/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:http/http.dart';
 
 import '../models/chat_user.dart';
 
@@ -25,6 +28,63 @@ class APIs {
 // for accessing current user
   static User get user => auth.currentUser!;
 
+  //For accessing firebase Messaging (push notification)
+  static FirebaseMessaging cloudmessaging = FirebaseMessaging.instance;
+
+  //For getting Firebase message token
+  static Future<String?> getFirebaseMessagingToken() async {
+    await cloudmessaging.requestPermission();
+    await cloudmessaging.getToken().then((t) {
+      if (t != null) {
+        me.pushToken = t;
+        log('Push Token: $t');
+      }
+    });
+
+    //This was for foreground notification
+
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   log('Got a message whilst in the foreground!');
+    //   log('Message data: ${message.data}');
+
+    //   if (message.notification != null) {
+    //     log('Message also contained a notification: ${message.notification}');
+    //   }
+    // });
+  }
+
+  //For Sending Push Notification Using Rest Api
+  static Future<void> SendPushNotif(ChatUser user, String msg) async {
+    try {
+      final body = {
+        "to": user.pushToken,
+        "notification": {
+          "title": user.name,
+          "body": msg,
+          "android_channel_id": "chats"
+        },
+        "data": {
+          "some_data": "User Info: ${me.id}",
+        },
+      };
+
+      var response = await post(
+        Uri.parse("https://fcm.googleapis.com/fcm/send"),
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.authorizationHeader:
+              'key=AAAAh8ronEc:APA91bEsaZVgzVcX2OJJKjNLJwpt40Pu6HFE4dMSNPzw_sJzxMrElXCCvlemIq9xLbvs5fbu3DK4tWO69g08-9WmczLUFHcKJd28sYEcPoEuNZ6loevzU3zzewiocivH1oyFLd6pToVv'
+        },
+        body: jsonEncode(body),
+      );
+
+      log('Response status: ${response.statusCode}');
+      log('Response body: ${response.body}');
+    } catch (e) {
+      log('Error Push Notification: $e');
+    }
+  }
+
   //for checking if user exists or not
   static Future<bool> UserExists() async {
     return (await firestore.collection('users').doc(user.uid).get()).exists;
@@ -35,6 +95,10 @@ class APIs {
     await firestore.collection('users').doc(user.uid).get().then((user) async {
       if (user.exists) {
         me = ChatUser.fromJson(user.data()!);
+        getFirebaseMessagingToken();
+        // to update last active status via firebase and system channel
+        // This is to set user status to online when user open app
+        APIs.updateLastActive(true);
         log('My Data:${user.data()}');
       } else {
         await createUser().then((value) => getSelfInfo());
@@ -98,22 +162,24 @@ class APIs {
     });
   }
 
-
-
 // Getting specific user information
-static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(ChatUser chatUser) {
-  return firestore
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(
+      ChatUser chatUser) {
+    return firestore
         .collection('users')
         .where('id', isEqualTo: chatUser.id)
         .snapshots();
-}
+  }
 
 // For updating User last active time
-static Future<void> updateLastActive(bool isOnline ) async {
-  firestore
-        .collection('users')
-        .doc(user.uid).update({'is_online' : isOnline, 'last_active': DateTime.now().millisecondsSinceEpoch.toString()});
-}
+  static Future<void> updateLastActive(bool isOnline) async {
+    firestore.collection('users').doc(user.uid).update({
+      'is_online': isOnline,
+      'last_active': DateTime.now().millisecondsSinceEpoch.toString(),
+      'push_token': me.pushToken,
+    });
+  }
+
   /// ************ * Chat screen wale*******************/
   ///
   /// // chats(collection) -> chat_id(document) -> messages(collection) -> message_id(document)
@@ -134,7 +200,10 @@ static Future<void> updateLastActive(bool isOnline ) async {
 
   // for sending message
   static Future<void> sendMessage(
-      ChatUser chatUser, String msg, Type type) async {
+    ChatUser chatUser,
+    String msg,
+    Type type,
+  ) async {
     // message sending time also used as message id in firestore database
     final time = DateTime.now().millisecondsSinceEpoch.toString();
 
@@ -148,7 +217,8 @@ static Future<void> updateLastActive(bool isOnline ) async {
         sent: time);
     final ref = firestore
         .collection('chats/${getConversationId(chatUser.id)}/messages/');
-    await ref.doc(time).set(message.toJson());
+    await ref.doc(time).set(message.toJson()).then(
+        (value) => SendPushNotif(chatUser, type == Type.text ? msg : 'image'));
   }
 
   // Blue tick means message is read by the receiver
