@@ -90,6 +90,31 @@ class APIs {
     return (await firestore.collection('users').doc(user.uid).get()).exists;
   }
 
+  //for Adding User
+  static Future<bool> AddChatUser(String email) async {
+    final data = await firestore
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get();
+
+    log('data: ${data.docs.first.id}');
+
+    if (data.docs.isNotEmpty && data.docs.first.id != user.uid) {
+      //user exists
+      log('User Exists: ${data.docs.first.id}');
+      firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('MyFrens')
+          .doc(data.docs.first.id)
+          .set({});
+
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // For getting current user information from firestore
   static Future<void> getSelfInfo() async {
     await firestore.collection('users').doc(user.uid).get().then((user) async {
@@ -127,11 +152,39 @@ class APIs {
   }
 
 // for getting all users from firestore database
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() {
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers(
+      List<String> userIds) {
+    log('UserIds: $userIds');
     return firestore
         .collection('users')
-        .where('id', isNotEqualTo: user.uid)
+        .where('id', whereIn: userIds)
+        // .where('id', isNotEqualTo: user.uid)
         .snapshots();
+  }
+
+  // for getting ids of my frens only
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getMyFrensId() {
+    return firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('MyFrens')
+        .snapshots();
+  }
+
+  //For sendfirst msg if user  adds new fren
+
+  static Future<void> SendFirstMessage(
+    ChatUser chatUser,
+    String msg,
+    Type type,
+  ) async {
+    await firestore
+        .collection('users')
+        .doc(chatUser.id)
+        .collection('MyFrens')
+        .doc(user.uid)
+        .set({}).then((value) => sendMessage(chatUser, msg, type));
   }
 
   // For updating User information

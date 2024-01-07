@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:chatapp/api/apis.dart';
+import 'package:chatapp/helper/dialouges.dart';
 import 'package:chatapp/models/chat_user.dart';
 import 'package:chatapp/screens/profile_screen.dart';
 import 'package:chatapp/screens/trialui.dart';
@@ -78,86 +79,92 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         },
         child: Scaffold(
-          appBar: AppBar(
-            //Home icon
-            leading: Icon(CupertinoIcons.home),
-            centerTitle: true,
-            elevation: 1,
-            iconTheme: const IconThemeData(color: Colors.black87),
-            title: _isSearching
-                ? TextField(
-                    decoration: const InputDecoration(
-                      hintText: 'Name, Email, ...',
-                      hintStyle: TextStyle(color: Colors.black87),
-                      border: InputBorder.none,
-                    ),
-                    autofocus: true,
-                    style: TextStyle(color: Colors.black87, fontSize: 19),
-                    onChanged: (val) {
-                      //Search logic
-                      _searchlist.clear();
-                      for (var i in _list) {
-                        if (i.name.toLowerCase().contains(val.toLowerCase()) ||
-                            i.email.toLowerCase().contains(val.toLowerCase()) ||
-                            i.about.toLowerCase().contains(val.toLowerCase())) {
-                          _searchlist.add(i);
+            appBar: AppBar(
+              //Home icon
+              leading: Icon(CupertinoIcons.home),
+              centerTitle: true,
+              elevation: 1,
+              iconTheme: const IconThemeData(color: Colors.black87),
+              title: _isSearching
+                  ? TextField(
+                      decoration: const InputDecoration(
+                        hintText: 'Name, Email, ...',
+                        hintStyle: TextStyle(color: Colors.black87),
+                        border: InputBorder.none,
+                      ),
+                      autofocus: true,
+                      style: TextStyle(color: Colors.black87, fontSize: 19),
+                      onChanged: (val) {
+                        //Search logic
+                        _searchlist.clear();
+                        for (var i in _list) {
+                          if (i.name
+                                  .toLowerCase()
+                                  .contains(val.toLowerCase()) ||
+                              i.email
+                                  .toLowerCase()
+                                  .contains(val.toLowerCase()) ||
+                              i.about
+                                  .toLowerCase()
+                                  .contains(val.toLowerCase())) {
+                            _searchlist.add(i);
+                          }
+                          setState(() {
+                            _searchlist;
+                          });
                         }
-                        setState(() {
-                          _searchlist;
-                        });
-                      }
-                    },
-                  )
-                : Text('Chat App',
-                    style: TextStyle(
-                        color: Colors.black87,
-                        fontWeight: FontWeight.normal,
-                        letterSpacing: 0.8,
-                        fontSize: 19)),
-            actions: [
-              //Icons
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    _isSearching = !_isSearching;
-                  });
-                },
-                icon: Icon(_isSearching
-                    ? CupertinoIcons.clear_circled_solid
-                    : Icons.search), //Search icon
-              ),
+                      },
+                    )
+                  : Text('Chat App',
+                      style: TextStyle(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.normal,
+                          letterSpacing: 0.8,
+                          fontSize: 19)),
+              actions: [
+                //Icons
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _isSearching = !_isSearching;
+                    });
+                  },
+                  icon: Icon(_isSearching
+                      ? CupertinoIcons.clear_circled_solid
+                      : Icons.search), //Search icon
+                ),
 
-              //More features button
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfileScreen(user: APIs.me)));
-                },
-                icon: Icon(Icons.more_vert),
-              ),
-            ],
-            backgroundColor: Colors.white,
-          ),
-
-          // floating button for chat
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.only(bottom: 12.0),
-            child: FloatingActionButton(
-              onPressed: () async {
-                // Navigator.push(context,
-                // MaterialPageRoute(builder: (context) => DrawerFb1()));
-              },
-              child: Icon(Icons.message),
-
-              //Message icon (chat bubble)
+                //More features button
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ProfileScreen(user: APIs.me)));
+                  },
+                  icon: Icon(Icons.more_vert),
+                ),
+              ],
+              backgroundColor: Colors.white,
             ),
-          ),
 
-          body: StreamBuilder(
-              stream: APIs
-                  .getAllUsers(), //users collection from firestore database in firebase
+            // floating button for chat
+            floatingActionButton: Padding(
+              padding: const EdgeInsets.only(bottom: 12.0),
+              child: FloatingActionButton(
+                onPressed: () {
+                  // Navigator.push(context,
+                  // MaterialPageRoute(builder: (context) => DrawerFb1()));
+                  _AddEmailUserDialog();
+                },
+                child: Icon(Icons.message),
+
+                //Message icon (chat bubble)
+              ),
+            ),
+            body: StreamBuilder(
+              stream: APIs.getMyFrensId(),
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
                   //if data is not loaded yet then waiting or none
@@ -168,35 +175,129 @@ class _HomeScreenState extends State<HomeScreen> {
                   //if data is loaded then active or done then show data
                   case ConnectionState.active:
                   case ConnectionState.done:
-                    final data = snapshot.data?.docs;
-                    // error in docs due to null safety in flutter to solve this error we have to add ? after docs
-                    _list = data
-                            ?.map((e) => ChatUser.fromJson(e.data()))
-                            .toList() ??
-                        [];
-                    if (_list.isNotEmpty) {
-                      return ListView.builder(
-                          itemCount:
-                              _isSearching ? _searchlist.length : _list.length,
-                          padding: EdgeInsets.only(top: mq.height * .01),
-                          physics: BouncingScrollPhysics(),
-                          itemBuilder: ((context, index) {
-                            return ChatUserCard(
-                              user: _isSearching
-                                  ? _searchlist[index]
-                                  : _list[index],
-                            );
-                            // return Text('Name: ${list[index]}');
-                          }));
-                    } else {
-                      return const Center(
-                          child: Text('No user found',
-                              style: TextStyle(fontSize: 20)));
-                    }
+                    return StreamBuilder(
+                      stream: APIs.getAllUsers(snapshot.data?.docs
+                              .map((e) => e.id)
+                              .toList() ??
+                          []), //users collection from firestore database in firebase
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          //if data is not loaded yet then waiting or none
+                          case ConnectionState.waiting:
+                          case ConnectionState.none:
+                          // return const Center(
+                          //     child: CircularProgressIndicator());
+
+                          //if data is loaded then active or done then show data
+                          case ConnectionState.active:
+                          case ConnectionState.done:
+                            final data = snapshot.data?.docs;
+                            // error in docs due to null safety in flutter to solve this error we have to add ? after docs
+                            _list = data
+                                    ?.map((e) => ChatUser.fromJson(e.data()))
+                                    .toList() ??
+                                [];
+                            if (_list.isNotEmpty) {
+                              return ListView.builder(
+                                  itemCount: _isSearching
+                                      ? _searchlist.length
+                                      : _list.length,
+                                  padding:
+                                      EdgeInsets.only(top: mq.height * .01),
+                                  physics: BouncingScrollPhysics(),
+                                  itemBuilder: ((context, index) {
+                                    return ChatUserCard(
+                                      user: _isSearching
+                                          ? _searchlist[index]
+                                          : _list[index],
+                                    );
+                                    // return Text('Name: ${list[index]}');
+                                  }));
+                            } else {
+                              return const Center(
+                                  child: Text('No user found',
+                                      style: TextStyle(fontSize: 20)));
+                            }
+                        }
+                      },
+                    );
                 }
-              }),
-        ),
+              },
+            )),
       ),
     );
+  }
+
+//Add chatuser
+  void _AddEmailUserDialog() {
+    String email = "";
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              contentPadding:
+                  EdgeInsets.only(top: 20, bottom: 10, left: 24, right: 24),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              title: Row(children: [
+                Icon(
+                  Icons.person_add,
+                  color: Colors.black87,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'Add User',
+                  style: TextStyle(color: Colors.black87),
+                )
+              ]),
+
+              //content
+              content: TextFormField(
+                maxLines: null,
+                onChanged: ((value) => email = value),
+                decoration: InputDecoration(
+                  hintText: "enter email",
+                  prefixIcon: Icon(Icons.email),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                ),
+              ),
+
+              actions: [
+                //cancel button
+                MaterialButton(
+                    onPressed: () {
+                      //hide dialog
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(color: Colors.black87),
+                    )),
+
+                //add button
+                MaterialButton(
+                  onPressed: () async {
+                    //hide dialog
+                    Navigator.pop(context);
+                    //add user
+                    if (email.isNotEmpty) {
+                      await APIs.AddChatUser(email).then((value) {
+                        if (!value) {
+                          Dialogs.showSnackBar(context, 'User not found');
+                        }
+                      });
+                    }
+                  },
+                  child: Text(
+                    'Add',
+                    style: TextStyle(color: Colors.black87),
+                  ),
+                )
+              ],
+
+              //
+            ));
   }
 }
