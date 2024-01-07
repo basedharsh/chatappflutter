@@ -46,10 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
       return Future.value(message);
     });
 
-    // to update last active status via firebase and system channel
-    // This is to set user status to online when user open app
-    APIs.updateLastActive(true);
-
     // resume means user open app
     // paused means user exit app
     // Here we used system channel to get app state and update last active status like whatsapp and telegram
