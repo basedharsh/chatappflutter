@@ -34,19 +34,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
       onTap: () => FocusScope.of(context)
           .unfocus(), // for removing keyboard when user taps anywhere on screen
       child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 22, 21, 21),
         appBar: AppBar(
           //Home icon
 
           centerTitle: true,
           elevation: 1,
-          iconTheme: const IconThemeData(color: Colors.black87),
+          iconTheme: const IconThemeData(color: Colors.white),
           title: const Text('My Profile',
               style: TextStyle(
-                  color: Colors.black87,
+                  color: Colors.white,
                   fontWeight: FontWeight.normal,
                   fontSize: 19)),
 
-          backgroundColor: Colors.white,
+          backgroundColor: const Color.fromARGB(255, 22, 21, 21),
         ),
 
         // floating button for chat
@@ -147,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 Text(widget.user.email,
                     style: const TextStyle(
-                        color: Colors.black54,
+                        color: Colors.white,
                         fontWeight: FontWeight.normal,
                         fontSize: 16)),
 
@@ -157,6 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 // for user name
                 TextFormField(
+                  style: const TextStyle(color: Colors.white),
                   initialValue: widget.user.name,
                   onSaved: (val) => APIs.me.name = val ?? '',
                   validator: (val) => val != null && val.isNotEmpty
@@ -169,6 +171,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     hintText: 'Enter your name',
                     labelText: 'Name',
+                    labelStyle: TextStyle(color: Colors.white),
                   ),
                 ),
                 // for adding space
@@ -177,6 +180,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 // for user about
                 TextFormField(
+                  style: const TextStyle(color: Colors.white),
                   initialValue: widget.user.about,
                   onSaved: (val) => APIs.me.about = val ?? '',
                   validator: (val) => val != null && val.isNotEmpty
@@ -190,6 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     hintText: 'Tell us about yourself',
                     labelText: 'About',
+                    labelStyle: TextStyle(color: Colors.white),
                   ),
                 ),
                 // for adding space
@@ -227,6 +232,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _showBottomSheet() {
     showModalBottomSheet(
+        backgroundColor: Colors.transparent,
         context: context,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -244,7 +250,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const Text(
                 'Pick profile picture',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
               ),
               SizedBox(height: mq.height * .02),
               Row(
