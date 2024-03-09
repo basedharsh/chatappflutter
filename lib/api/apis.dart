@@ -40,6 +40,7 @@ class APIs {
         log('Push Token: $t');
       }
     });
+    return null;
 
     //This was for foreground notification
 
