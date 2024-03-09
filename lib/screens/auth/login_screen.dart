@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, duplicate_ignore
+
 import 'dart:developer';
 import 'dart:io';
 
@@ -21,9 +23,9 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isAnimated = false;
   @override
   void initState() {
-    // TODO: implement initState
+    //  implement initState
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
         _isAnimated = true;
       });
@@ -40,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
               log('\nUserAdditionalInfo: ${user.additionalUserInfo}'),
               if ((await APIs.UserExists()))
                 {
+                  // ignore: use_build_context_synchronously
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -123,9 +126,9 @@ class _LoginScreenState extends State<LoginScreen> {
             height: mq.height * .06,
             child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                primary: Colors.greenAccent.shade700,
-                onPrimary: Colors.white,
-                shape: StadiumBorder(),
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.greenAccent.shade700,
+                shape: const StadiumBorder(),
                 elevation: 1,
               ),
               onPressed: () {

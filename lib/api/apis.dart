@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, duplicate_ignore
+
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -11,6 +13,7 @@ import 'package:http/http.dart';
 
 import '../models/chat_user.dart';
 
+// ignore: duplicate_ignore
 class APIs {
   // for authentication
   static FirebaseAuth auth = FirebaseAuth.instance;
@@ -55,6 +58,7 @@ class APIs {
   }
 
   //For Sending Push Notification Using Rest Api
+  // ignore: non_constant_identifier_names
   static Future<void> SendPushNotif(ChatUser user, String msg) async {
     try {
       final body = {

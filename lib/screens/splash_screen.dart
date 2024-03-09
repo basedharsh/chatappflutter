@@ -16,14 +16,13 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  bool _isAnimated = false;
   @override
+  //  implement initState
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
           systemNavigationBarColor: Colors.white,
           statusBarColor: Colors.white,
           statusBarIconBrightness: Brightness.dark));
@@ -45,9 +44,9 @@ class _SplashScreenState extends State<SplashScreen> {
     mq = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
-        foregroundColor: Color.fromARGB(255, 255, 255, 255),
+        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
         //Home icon
         automaticallyImplyLeading: false,
         centerTitle: true,
@@ -70,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Positioned(
             bottom: mq.height * .15,
             width: mq.width,
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
@@ -78,14 +77,14 @@ class _SplashScreenState extends State<SplashScreen> {
                   color: Colors.black87,
                   size: 24,
                 ),
-                const Text('Insta: ',
+                Text('Insta: ',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Color.fromRGBO(0, 0, 0, 0.867),
                         letterSpacing: .9,
                         fontWeight: FontWeight.normal,
                         fontSize: 24)),
-                const Text('basedharsh 😊👌',
+                Text('basedharsh 😊👌',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Color.fromARGB(255, 251, 172, 172),

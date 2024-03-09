@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 import 'dart:io';
 
@@ -69,12 +71,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   // Basially yeha hum back jaarahe home screen pe fir logout ke liye Navigator pushReplacement use karahe hai
                   // replacing the home screen with login screen
                   Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (_) => LoginScreen()));
+                      MaterialPageRoute(builder: (_) => const LoginScreen()));
                 });
               });
             },
-            icon: Icon(Icons.logout),
-            label: Text('Logout'), //Message icon (chat bubble)
+            icon: const Icon(Icons.logout),
+            label: const Text('Logout'), //Message icon (chat bubble)
           ),
         ),
 
@@ -133,7 +135,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         },
                         shape: const CircleBorder(),
                         color: Colors.white,
-                        child: Icon(Icons.edit, color: Colors.greenAccent),
+                        child:
+                            const Icon(Icons.edit, color: Colors.greenAccent),
                       ),
                     )
                   ],
@@ -195,9 +198,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      shape: StadiumBorder(),
+                      shape: const StadiumBorder(),
+                      backgroundColor: Colors.greenAccent.shade400,
                       minimumSize: Size(mq.width * .5, mq.height * .06),
-                      primary: Colors.greenAccent.shade400,
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -208,11 +211,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         });
                       }
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.edit,
                       size: 28,
                     ),
-                    label: Text('Update', style: TextStyle(fontSize: 19))),
+                    label:
+                        const Text('Update', style: TextStyle(fontSize: 19))),
               ]),
             ),
           ),
