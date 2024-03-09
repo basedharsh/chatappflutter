@@ -23,6 +23,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.transparent,
       margin: EdgeInsets.symmetric(horizontal: mq.width * .02, vertical: 4),
       // color: Colors.blue.shade100,
       elevation: 0.5,
@@ -70,17 +71,20 @@ class _ChatUserCardState extends State<ChatUserCard> {
                   ),
                 ),
                 // User name
-                title: Text(widget.user.name),
+                title: Text(widget.user.name,
+                    style: const TextStyle(fontSize: 20, color: Colors.white)),
 
                 // Last message
 
                 subtitle: Text(
-                    _message != null
-                        ? _message!.type == Type.image
-                            ? 'Image'
-                            : _message!.msg
-                        : widget.user.about,
-                    maxLines: 1),
+                  _message != null
+                      ? _message!.type == Type.image
+                          ? 'Image'
+                          : _message!.msg
+                      : widget.user.about,
+                  maxLines: 1,
+                  style: const TextStyle(color: Colors.white),
+                ),
 
                 // Time of last message
                 // trailing: Text('12:00', style: TextStyle(color: Colors.black54)),
@@ -102,7 +106,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                         : Text(
                             MyDateHelper.getLastReadMessageTime(
                                 context: context, time: _message!.sent),
-                            style: const TextStyle(color: Colors.black54)),
+                            style: const TextStyle(color: Colors.white)),
               );
             }),
           )),

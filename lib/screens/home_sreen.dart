@@ -77,9 +77,11 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         },
         child: Scaffold(
+            backgroundColor: const Color.fromARGB(255, 0, 0, 0),
             appBar: AppBar(
+              backgroundColor: const Color.fromARGB(255, 22, 21, 21),
               //Home icon
-              leading: const Icon(CupertinoIcons.home),
+              // leading: const Icon(CupertinoIcons.home),
               centerTitle: true,
               elevation: 1,
               iconTheme: const IconThemeData(color: Colors.black87),
@@ -87,12 +89,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? TextField(
                       decoration: const InputDecoration(
                         hintText: 'Name, Email, ...',
-                        hintStyle: TextStyle(color: Colors.black87),
+                        hintStyle: TextStyle(color: Colors.white),
                         border: InputBorder.none,
                       ),
                       autofocus: true,
-                      style:
-                          const TextStyle(color: Colors.black87, fontSize: 19),
+                      style: const TextStyle(color: Colors.white, fontSize: 19),
                       onChanged: (val) {
                         //Search logic
                         _searchlist.clear();
@@ -116,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   : const Text('Chat App',
                       style: TextStyle(
-                          color: Colors.black87,
+                          color: Colors.white,
                           fontWeight: FontWeight.normal,
                           letterSpacing: 0.8,
                           fontSize: 19)),
@@ -128,9 +129,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       _isSearching = !_isSearching;
                     });
                   },
-                  icon: Icon(_isSearching
-                      ? CupertinoIcons.clear_circled_solid
-                      : Icons.search), //Search icon
+                  icon: Icon(
+                      _isSearching
+                          ? CupertinoIcons.clear_circled_solid
+                          : Icons.search,
+                      color: Colors.white), //Search icon
                 ),
 
                 //More features button
@@ -142,10 +145,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             builder: (context) =>
                                 ProfileScreen(user: APIs.me)));
                   },
-                  icon: const Icon(Icons.more_vert),
+                  icon: const Icon(Icons.more_vert, color: Colors.white),
                 ),
               ],
-              backgroundColor: Colors.white,
             ),
 
             // floating button for chat
@@ -157,6 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   // MaterialPageRoute(builder: (context) => DrawerFb1()));
                   _AddEmailUserDialog();
                 },
+                backgroundColor: Colors.greenAccent.shade400,
                 child: const Icon(Icons.message),
 
                 //Message icon (chat bubble)
@@ -166,57 +169,77 @@ class _HomeScreenState extends State<HomeScreen> {
               stream: APIs.getMyFrensId(),
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
-                  //if data is not loaded yet then waiting or none
                   case ConnectionState.waiting:
                   case ConnectionState.none:
                     return const Center(child: CircularProgressIndicator());
-
-                  //if data is loaded then active or done then show data
                   case ConnectionState.active:
                   case ConnectionState.done:
                     return StreamBuilder(
                       stream: APIs.getAllUsers(snapshot.data?.docs
                               .map((e) => e.id)
                               .toList() ??
-                          []), //users collection from firestore database in firebase
+                          []), // Users collection from Firestore database in Firebase
                       builder: (context, snapshot) {
-                        switch (snapshot.connectionState) {
-                          //if data is not loaded yet then waiting or none
-                          case ConnectionState.waiting:
-                          case ConnectionState.none:
-                          // return const Center(
-                          //     child: CircularProgressIndicator());
+                        if (snapshot.connectionState ==
+                                ConnectionState.waiting ||
+                            snapshot.connectionState == ConnectionState.none) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
 
-                          //if data is loaded then active or done then show data
-                          case ConnectionState.active:
-                          case ConnectionState.done:
-                            final data = snapshot.data?.docs;
-                            // error in docs due to null safety in flutter to solve this error we have to add ? after docs
-                            _list = data
-                                    ?.map((e) => ChatUser.fromJson(e.data()))
-                                    .toList() ??
-                                [];
-                            if (_list.isNotEmpty) {
-                              return ListView.builder(
+                        final data = snapshot.data?.docs;
+                        _list = data
+                                ?.map((e) => ChatUser.fromJson(e.data()))
+                                .toList() ??
+                            [];
+
+                        if (_list.isNotEmpty) {
+                          return Column(
+                            children: [
+                              Flexible(
+                                child: ListView.builder(
                                   itemCount: _isSearching
                                       ? _searchlist.length
                                       : _list.length,
                                   padding:
                                       EdgeInsets.only(top: mq.height * .01),
                                   physics: const BouncingScrollPhysics(),
-                                  itemBuilder: ((context, index) {
+                                  itemBuilder: (context, index) {
                                     return ChatUserCard(
                                       user: _isSearching
                                           ? _searchlist[index]
                                           : _list[index],
                                     );
-                                    // return Text('Name: ${list[index]}');
-                                  }));
-                            } else {
-                              return const Center(
-                                  child: Text('No user found',
-                                      style: TextStyle(fontSize: 20)));
-                            }
+                                  },
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(bottom: 40),
+                                child: Text(
+                                  'Basedharsh.com   ❤️',
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: Text('No user found',
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Made by Harsh',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ],
+                          );
                         }
                       },
                     );

@@ -62,82 +62,90 @@ class _ChatScreenState extends State<ChatScreen> {
             appBar: AppBar(
               automaticallyImplyLeading: false,
               flexibleSpace: _appBar(),
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.black,
             ),
             backgroundColor: const Color.fromARGB(255, 146, 254, 254),
-            body: Column(
-              children: [
-                Expanded(
-                  child: StreamBuilder(
-                      stream: APIs.getAllmessages(widget
-                          .user), //users collection from firestore database in firebase
-                      builder: (context, snapshot) {
-                        switch (snapshot.connectionState) {
-                          //if data is not loaded yet then waiting or none
-                          case ConnectionState.waiting:
-                          case ConnectionState.none:
-                            return const SizedBox();
-
-                          //if data is loaded then active or done then show data
-                          case ConnectionState.active:
-                          case ConnectionState.done:
-                            final data = snapshot.data?.docs;
-
-                            _list = data
-                                    ?.map((e) => Message.fromJson(e.data()))
-                                    .toList() ??
-                                [];
-
-                            if (_list.isNotEmpty) {
-                              return ListView.builder(
-                                  reverse:
-                                      true, // for showing latest message at bottom of the list view
-                                  itemCount: _list.length,
-                                  padding:
-                                      EdgeInsets.only(top: mq.height * .01),
-                                  physics: const BouncingScrollPhysics(),
-                                  itemBuilder: ((context, index) {
-                                    return MessageCard(
-                                      message: _list[index],
-                                    );
-                                  }));
-                            } else {
-                              return const Center(
-                                  child: Text('Say hii😯😯!',
-                                      style: TextStyle(fontSize: 20)));
-                            }
-                        }
-                      }),
+            body: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("images/ooga.jpg"),
+                  fit: BoxFit.cover,
                 ),
-                // for showing progress indicator when image is uploading to firebase storage
-                if (_isUploading)
-                  const Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ))),
-                // for showing the input field and send button
-                _chatInput(),
-                if (_showEmoji)
-                  SizedBox(
-                    height: mq.height * .35,
-                    child: EmojiPicker(
-                      textEditingController: _textController,
-                      config: Config(
-                        bgColor: const Color.fromARGB(255, 146, 254, 254),
-                        columns: 9,
-                        initCategory: Category.RECENT,
-                        emojiSizeMax: 32 *
-                            (Platform.isIOS
-                                ? 1.30
-                                : 1.0), // Issue: https://github.com/flutter/flutter/issues/28894
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: StreamBuilder(
+                        stream: APIs.getAllmessages(widget
+                            .user), //users collection from firestore database in firebase
+                        builder: (context, snapshot) {
+                          switch (snapshot.connectionState) {
+                            //if data is not loaded yet then waiting or none
+                            case ConnectionState.waiting:
+                            case ConnectionState.none:
+                              return const SizedBox();
+
+                            //if data is loaded then active or done then show data
+                            case ConnectionState.active:
+                            case ConnectionState.done:
+                              final data = snapshot.data?.docs;
+
+                              _list = data
+                                      ?.map((e) => Message.fromJson(e.data()))
+                                      .toList() ??
+                                  [];
+
+                              if (_list.isNotEmpty) {
+                                return ListView.builder(
+                                    reverse:
+                                        true, // for showing latest message at bottom of the list view
+                                    itemCount: _list.length,
+                                    padding:
+                                        EdgeInsets.only(top: mq.height * .01),
+                                    physics: const BouncingScrollPhysics(),
+                                    itemBuilder: ((context, index) {
+                                      return MessageCard(
+                                        message: _list[index],
+                                      );
+                                    }));
+                              } else {
+                                return const Center(
+                                    child: Text('Say hii😯😯!',
+                                        style: TextStyle(fontSize: 20)));
+                              }
+                          }
+                        }),
+                  ),
+                  // for showing progress indicator when image is uploading to firebase storage
+                  if (_isUploading)
+                    const Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 16),
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ))),
+                  // for showing the input field and send button
+                  _chatInput(),
+                  if (_showEmoji)
+                    SizedBox(
+                      height: mq.height * .35,
+                      child: EmojiPicker(
+                        textEditingController: _textController,
+                        config: Config(
+                          bgColor: const Color.fromARGB(255, 146, 254, 254),
+                          columns: 9,
+                          initCategory: Category.RECENT,
+                          emojiSizeMax: 32 *
+                              (Platform.isIOS
+                                  ? 1.30
+                                  : 1.0), // Issue: https://github.com/flutter/flutter/issues/28894
+                        ),
                       ),
-                    ),
-                  )
-              ],
+                    )
+                ],
+              ),
             ),
           ),
         ),
@@ -166,7 +174,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(
                         Icons.arrow_back_ios,
-                        color: Colors.black87,
+                        color: Colors.white,
                       )),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(mq.height * .03),
@@ -189,7 +197,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       Text(
                         list.isNotEmpty ? list[0].name : widget.user.name,
                         style: const TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
                         ),
@@ -207,7 +215,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 context: context,
                                 lastActive: widget.user.lastActive),
                         style: const TextStyle(
-                          color: Colors.black,
+                          color: Colors.white54,
                           fontSize: 12,
                         ),
                       ),
@@ -227,6 +235,7 @@ class _ChatScreenState extends State<ChatScreen> {
           // Input field and buttons
           Expanded(
             child: Card(
+              color: const Color.fromARGB(255, 35, 34, 34),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -250,6 +259,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   // text send box
                   Expanded(
                       child: TextField(
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
                     controller: _textController,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
@@ -342,7 +354,7 @@ class _ChatScreenState extends State<ChatScreen> {
               padding: const EdgeInsets.only(
                   top: 10, bottom: 10, left: 20, right: 20),
               shape: const CircleBorder(),
-              color: const Color.fromARGB(255, 5, 189, 240),
+              color: const Color.fromARGB(255, 15, 136, 25),
               child: const Icon(Icons.send,
                   color: Color.fromARGB(255, 227, 228, 228), size: 30)),
         ],

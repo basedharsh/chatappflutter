@@ -26,19 +26,20 @@ class _ViewSenderProfileState extends State<ViewSenderProfile> {
       onTap: () => FocusScope.of(context)
           .unfocus(), // for removing keyboard when user taps anywhere on screen
       child: Scaffold(
+        backgroundColor: Colors.black,
         appBar: AppBar(
           //Home icon
 
           centerTitle: true,
           elevation: 1,
-          iconTheme: const IconThemeData(color: Colors.black87),
+          iconTheme: const IconThemeData(color: Colors.white),
           title: Text(widget.user.name,
               style: const TextStyle(
-                  color: Colors.black87,
+                  color: Colors.white,
                   fontWeight: FontWeight.normal,
                   fontSize: 19)),
 
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.black,
         ),
 
         // floating button for Join date
@@ -92,12 +93,12 @@ class _ViewSenderProfileState extends State<ViewSenderProfile> {
                 children: [
                   const Text("Email: ",
                       style: TextStyle(
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 17)),
                   Text(widget.user.email,
                       style: const TextStyle(
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: Colors.white,
                           fontWeight: FontWeight.normal,
                           fontSize: 16)),
                 ],
@@ -110,12 +111,12 @@ class _ViewSenderProfileState extends State<ViewSenderProfile> {
                 children: [
                   const Text("Name: ",
                       style: TextStyle(
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 17)),
                   Text(widget.user.name,
                       style: const TextStyle(
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: Colors.white,
                           fontWeight: FontWeight.normal,
                           fontSize: 16)),
                 ],
@@ -128,12 +129,12 @@ class _ViewSenderProfileState extends State<ViewSenderProfile> {
                 children: [
                   const Text("About: ",
                       style: TextStyle(
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 17)),
                   Text(widget.user.about,
                       style: const TextStyle(
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: Colors.white,
                           fontWeight: FontWeight.normal,
                           fontSize: 16)),
                 ],
