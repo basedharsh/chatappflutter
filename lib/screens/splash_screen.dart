@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
     mq = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.black,
       appBar: AppBar(
         foregroundColor: const Color.fromARGB(255, 255, 255, 255),
         //Home icon
@@ -54,10 +54,10 @@ class _SplashScreenState extends State<SplashScreen> {
         iconTheme: const IconThemeData(color: Colors.black87),
         title: const Text('Welcome to Chat App',
             style: TextStyle(
-                color: Colors.black87,
+                color: Colors.white,
                 fontWeight: FontWeight.normal,
                 fontSize: 19)),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 22, 21, 21),
       ),
       body: Stack(
         children: [
@@ -72,19 +72,19 @@ class _SplashScreenState extends State<SplashScreen> {
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.message_outlined,
-                  color: Colors.black87,
-                  size: 24,
-                ),
-                Text('Insta: ',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Color.fromRGBO(0, 0, 0, 0.867),
-                        letterSpacing: .9,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 24)),
-                Text('basedharsh 😊👌',
+                // Icon(
+                //   Icons.message_outlined,
+                //   color: Colors.black87,
+                //   size: 24,
+                // ),
+                // Text('Insta: ',
+                //     textAlign: TextAlign.center,
+                //     style: TextStyle(
+                //         color: Color.fromRGBO(0, 0, 0, 0.867),
+                //         letterSpacing: .9,
+                //         fontWeight: FontWeight.normal,
+                //         fontSize: 24)),
+                Text('basedharsh.com  ❤️',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Color.fromARGB(255, 251, 172, 172),

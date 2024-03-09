@@ -98,6 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // mq = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         //Home icon
         automaticallyImplyLeading: false,
@@ -106,10 +107,10 @@ class _LoginScreenState extends State<LoginScreen> {
         iconTheme: const IconThemeData(color: Colors.black87),
         title: const Text('Welcome to Chat App',
             style: TextStyle(
-                color: Colors.black87,
+                color: Colors.white,
                 fontWeight: FontWeight.normal,
                 fontSize: 19)),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 22, 21, 21),
       ),
       body: Stack(
         children: [
@@ -142,12 +143,33 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontSize: 19,
                 ),
                 children: [
-                  TextSpan(text: 'Sign In with  '),
+                  TextSpan(
+                    text: 'Sign In with  ',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                   TextSpan(
                       text: 'Google',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
               )),
+            ),
+          ),
+          //Basedharsh.com
+          Positioned(
+            bottom: 40, // Adjust the value as per your design requirement.
+            left: 0,
+            right: 0,
+            child: Text(
+              'basedharsh.com ❤️',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color.fromARGB(255, 251, 172, 172),
+                letterSpacing: .9,
+                fontWeight: FontWeight.normal,
+                fontSize: 20,
+              ),
             ),
           ),
         ],
