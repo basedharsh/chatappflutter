@@ -1,17 +1,13 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:chatapp/api/apis.dart';
 import 'package:chatapp/helper/dialouges.dart';
 import 'package:chatapp/models/chat_user.dart';
 import 'package:chatapp/screens/profile_screen.dart';
-import 'package:chatapp/screens/trialui.dart';
 import 'package:chatapp/widgets/chat_user_card.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '../main.dart';
 
@@ -60,22 +56,24 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       // to hide keyboard when user tap on screen
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: WillPopScope(
+      child: PopScope(
         // to prevent user from exiting app by pressing back button
-        onWillPop: () {
-          if (_isSearching) {
+        canPop:
+            _isSearching, // If _isSearching is true, we handle the pop ourselves
+        onPopInvoked: (bool didPop) {
+          // This callback handles the pop action
+          if (!didPop && _isSearching) {
+            // If didPop is false and we're searching, we cancel the search
             setState(() {
-              _isSearching = !_isSearching;
+              _isSearching = false;
             });
-            return Future.value(false);
-          } else {
-            return Future.value(true);
           }
         },
         child: Scaffold(

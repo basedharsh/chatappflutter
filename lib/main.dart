@@ -1,4 +1,5 @@
 import 'package:chatapp/screens/splash_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
                 color: Colors.black87,
                 fontWeight: FontWeight.normal,
                 fontSize: 19)),
-        backgroundColor: Colors.white,
+        colorScheme: const ColorScheme.light(primary: Colors.white),
       ),
       home: const SplashScreen(),
     );
@@ -58,7 +59,9 @@ _initializeFirebase() async {
     importance: NotificationImportance.IMPORTANCE_HIGH,
     name: 'CHATS',
   );
-  print(result);
+  if (kDebugMode) {
+    print(result);
+  }
 }
 
 

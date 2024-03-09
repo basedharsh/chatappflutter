@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -10,8 +9,6 @@ import 'package:chatapp/screens/ViewProfile.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../api/apis.dart';
@@ -47,6 +44,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return GestureDetector(
       onTap: (() => FocusScope.of(context).unfocus()),
       child: SafeArea(
+        // ignore: deprecated_member_use
         child: WillPopScope(
           // if user press back button then hide emoji picker and don't exit app to main screen
           onWillPop: () {
@@ -66,7 +64,7 @@ class _ChatScreenState extends State<ChatScreen> {
               flexibleSpace: _appBar(),
               backgroundColor: Colors.white,
             ),
-            backgroundColor: Color.fromARGB(255, 146, 254, 254),
+            backgroundColor: const Color.fromARGB(255, 146, 254, 254),
             body: Column(
               children: [
                 Expanded(
@@ -97,7 +95,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   itemCount: _list.length,
                                   padding:
                                       EdgeInsets.only(top: mq.height * .01),
-                                  physics: BouncingScrollPhysics(),
+                                  physics: const BouncingScrollPhysics(),
                                   itemBuilder: ((context, index) {
                                     return MessageCard(
                                       message: _list[index],
@@ -166,7 +164,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: [
                   IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.arrow_back_ios,
                         color: Colors.black87,
                       )),
@@ -182,7 +180,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,13 +188,13 @@ class _ChatScreenState extends State<ChatScreen> {
                       // for printing the name of the user
                       Text(
                         list.isNotEmpty ? list[0].name : widget.user.name,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 2),
                       // for printing the last seen of the user
                       Text(
                         list.isNotEmpty
@@ -257,9 +255,10 @@ class _ChatScreenState extends State<ChatScreen> {
                     maxLines: null,
                     onTap: () {
                       // to hide emoji picker when text field is tapped
-                      if (_showEmoji)
+                      if (_showEmoji) {
                         setState(() => _showEmoji =
                             !_showEmoji); // to hide emoji picker when text field is tapped
+                      }
                     },
                     decoration: InputDecoration(
                       hintText: "Type a message",
@@ -340,11 +339,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 }
               },
               minWidth: 0,
-              padding:
-                  EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
-              shape: CircleBorder(),
-              color: Color.fromARGB(255, 5, 189, 240),
-              child: Icon(Icons.send,
+              padding: const EdgeInsets.only(
+                  top: 10, bottom: 10, left: 20, right: 20),
+              shape: const CircleBorder(),
+              color: const Color.fromARGB(255, 5, 189, 240),
+              child: const Icon(Icons.send,
                   color: Color.fromARGB(255, 227, 228, 228), size: 30)),
         ],
       ),
