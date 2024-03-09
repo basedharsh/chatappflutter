@@ -21,7 +21,6 @@ class Message {
     read = json['read'].toString();
     toId = json['toId'].toString();
     type = json['type'].toString() == Type.image.name ? Type.image : Type.text;
-    ;
     sent = json['sent'].toString();
   }
 

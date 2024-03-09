@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
             appBar: AppBar(
               //Home icon
-              leading: Icon(CupertinoIcons.home),
+              leading: const Icon(CupertinoIcons.home),
               centerTitle: true,
               elevation: 1,
               iconTheme: const IconThemeData(color: Colors.black87),
@@ -91,7 +91,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         border: InputBorder.none,
                       ),
                       autofocus: true,
-                      style: TextStyle(color: Colors.black87, fontSize: 19),
+                      style:
+                          const TextStyle(color: Colors.black87, fontSize: 19),
                       onChanged: (val) {
                         //Search logic
                         _searchlist.clear();
@@ -113,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                       },
                     )
-                  : Text('Chat App',
+                  : const Text('Chat App',
                       style: TextStyle(
                           color: Colors.black87,
                           fontWeight: FontWeight.normal,
@@ -141,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             builder: (context) =>
                                 ProfileScreen(user: APIs.me)));
                   },
-                  icon: Icon(Icons.more_vert),
+                  icon: const Icon(Icons.more_vert),
                 ),
               ],
               backgroundColor: Colors.white,
@@ -156,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   // MaterialPageRoute(builder: (context) => DrawerFb1()));
                   _AddEmailUserDialog();
                 },
-                child: Icon(Icons.message),
+                child: const Icon(Icons.message),
 
                 //Message icon (chat bubble)
               ),
@@ -202,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       : _list.length,
                                   padding:
                                       EdgeInsets.only(top: mq.height * .01),
-                                  physics: BouncingScrollPhysics(),
+                                  physics: const BouncingScrollPhysics(),
                                   itemBuilder: ((context, index) {
                                     return ChatUserCard(
                                       user: _isSearching
@@ -227,16 +228,17 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 //Add chatuser
+  // ignore: non_constant_identifier_names
   void _AddEmailUserDialog() {
     String email = "";
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
-              contentPadding:
-                  EdgeInsets.only(top: 20, bottom: 10, left: 24, right: 24),
+              contentPadding: const EdgeInsets.only(
+                  top: 20, bottom: 10, left: 24, right: 24),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
-              title: Row(children: [
+              title: const Row(children: [
                 Icon(
                   Icons.person_add,
                   color: Colors.black87,
@@ -256,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onChanged: ((value) => email = value),
                 decoration: InputDecoration(
                   hintText: "enter email",
-                  prefixIcon: Icon(Icons.email),
+                  prefixIcon: const Icon(Icons.email),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15)),
                 ),
@@ -269,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       //hide dialog
                       Navigator.pop(context);
                     },
-                    child: Text(
+                    child: const Text(
                       'Cancel',
                       style: TextStyle(color: Colors.black87),
                     )),
@@ -288,7 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       });
                     }
                   },
-                  child: Text(
+                  child: const Text(
                     'Add',
                     style: TextStyle(color: Colors.black87),
                   ),

@@ -5,8 +5,6 @@ import 'package:chatapp/main.dart';
 import 'package:chatapp/models/message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 import '../models/chat_user.dart';
 import '../screens/chat_screen.dart';

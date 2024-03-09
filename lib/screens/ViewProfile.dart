@@ -1,17 +1,12 @@
-import 'dart:developer';
-import 'dart:io';
+// ignore: file_names
+
+// ignore_for_file: file_names, duplicate_ignore
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chatapp/api/apis.dart';
-import 'package:chatapp/helper/dialouges.dart';
 import 'package:chatapp/helper/my_date.dart';
 import 'package:chatapp/models/chat_user.dart';
-import 'package:chatapp/screens/auth/login_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../main.dart';
 
@@ -38,7 +33,7 @@ class _ViewSenderProfileState extends State<ViewSenderProfile> {
           elevation: 1,
           iconTheme: const IconThemeData(color: Colors.black87),
           title: Text(widget.user.name,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.black87,
                   fontWeight: FontWeight.normal,
                   fontSize: 19)),

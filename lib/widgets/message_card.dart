@@ -2,9 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/api/apis.dart';
 import 'package:chatapp/helper/my_date.dart';
 import 'package:chatapp/main.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 import '../models/message.dart';
 
@@ -40,9 +38,9 @@ class _MessageCardState extends State<MessageCard> {
             margin: EdgeInsets.symmetric(
                 horizontal: mq.width * 0.04, vertical: mq.height * 0.01),
             decoration: BoxDecoration(
-                color: Color.fromARGB(255, 217, 243, 255),
+                color: const Color.fromARGB(255, 217, 243, 255),
                 border: Border.all(color: Colors.lightBlue),
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomRight: Radius.circular(20),
                   topRight: Radius.circular(20),
                   bottomLeft: Radius.circular(20),
@@ -115,9 +113,10 @@ class _MessageCardState extends State<MessageCard> {
             margin: EdgeInsets.symmetric(
                 horizontal: mq.width * 0.04, vertical: mq.height * 0.01),
             decoration: BoxDecoration(
-                color: Color.fromARGB(255, 135, 253, 196),
-                border: Border.all(color: Color.fromARGB(255, 134, 198, 61)),
-                borderRadius: BorderRadius.only(
+                color: const Color.fromARGB(255, 135, 253, 196),
+                border:
+                    Border.all(color: const Color.fromARGB(255, 134, 198, 61)),
+                borderRadius: const BorderRadius.only(
                   bottomRight: Radius.circular(20),
                   topLeft: Radius.circular(20),
                   bottomLeft: Radius.circular(20),
@@ -143,7 +142,7 @@ class _MessageCardState extends State<MessageCard> {
                         ),
                       ),
                       errorWidget: (context, url, error) =>
-                          Icon(Icons.image, size: 70),
+                          const Icon(Icons.image, size: 70),
                     ),
                   ),
           ),
