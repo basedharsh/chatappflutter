@@ -30,6 +30,11 @@
   <img src="https://media.giphy.com/media/l0HlRWOxvtUYYAC7m/giphy.gif">
 </p>
 
+<div align="center">
+ 
+   ![Alt](https://repobeats.axiom.co/api/embed/b90e20afe4a686c459962e9dbb5328befafe14f2.svg "Repobeats analytics image")
+   
+ </div>
 # ChatAppFlutter
 
 Welcome to ChatAppFlutter, a Flutter-based chat application with real-time messaging capabilities powered by Firebase. Connect with friends, share messages, images, and more, all within the app.
